@@ -476,7 +476,7 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
             {(mode === 'preview' || mode === 'split') && (
               <div className={`h-full overflow-y-auto pr-2 ${mode === 'split' ? 'w-1/2' : 'w-full max-w-4xl mx-auto'}`}>
                 <div
-                  className="cosmo-prose text-sm leading-relaxed"
+                  className="cosmo-prose text-sm leading-relaxed text-slate-800 dark:text-zinc-200"
                   dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }}
                 />
               </div>

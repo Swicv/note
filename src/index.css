@@ -66,25 +66,51 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   margin: 1.25rem 0;
   font-size: 0.95rem;
 }
-.callout-note {
+html.dark .callout {
+  color: #e4e4e7;
+}
+html:not(.dark) .callout {
+  color: #1e293b;
+}
+html.dark .callout-note {
   border-left-color: #3b82f6;
-  background-color: rgba(59, 130, 246, 0.08);
+  background-color: rgba(59, 130, 246, 0.1);
 }
-.callout-tip {
+html:not(.dark) .callout-note {
+  border-left-color: #2563eb;
+  background-color: #eff6ff;
+}
+html.dark .callout-tip {
   border-left-color: #10b981;
-  background-color: rgba(16, 185, 129, 0.08);
+  background-color: rgba(16, 185, 129, 0.1);
 }
-.callout-warning {
+html:not(.dark) .callout-tip {
+  border-left-color: #059669;
+  background-color: #ecfdf5;
+}
+html.dark .callout-warning {
   border-left-color: #f59e0b;
-  background-color: rgba(245, 158, 11, 0.08);
+  background-color: rgba(245, 158, 11, 0.1);
 }
-.callout-important {
+html:not(.dark) .callout-warning {
+  border-left-color: #d97706;
+  background-color: #fffbeb;
+}
+html.dark .callout-important {
   border-left-color: #8b5cf6;
-  background-color: rgba(139, 92, 246, 0.08);
+  background-color: rgba(139, 92, 246, 0.1);
 }
-.callout-caution {
+html:not(.dark) .callout-important {
+  border-left-color: #7c3aed;
+  background-color: #faf5ff;
+}
+html.dark .callout-caution {
   border-left-color: #ef4444;
-  background-color: rgba(239, 68, 68, 0.08);
+  background-color: rgba(239, 68, 68, 0.1);
+}
+html:not(.dark) .callout-caution {
+  border-left-color: #dc2626;
+  background-color: #fef2f2;
 }
 
 /* Typography Enhancements for Editor & Reader */
@@ -92,16 +118,38 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   line-height: 1.8;
   letter-spacing: -0.01em;
 }
-.cosmo-prose h1, .cosmo-prose h2, .cosmo-prose h3 {
+html.dark .cosmo-prose {
+  color: #e4e4e7;
+}
+html:not(.dark) .cosmo-prose {
+  color: #1e293b;
+}
+
+.cosmo-prose h1, .cosmo-prose h2, .cosmo-prose h3, .cosmo-prose h4 {
   letter-spacing: -0.025em;
   font-weight: 700;
 }
-html.dark .cosmo-prose h1, html.dark .cosmo-prose h2, html.dark .cosmo-prose h3 {
+html.dark .cosmo-prose h1, html.dark .cosmo-prose h2, html.dark .cosmo-prose h3, html.dark .cosmo-prose h4 {
   color: #ffffff;
 }
-html:not(.dark) .cosmo-prose h1, html:not(.dark) .cosmo-prose h2, html:not(.dark) .cosmo-prose h3 {
+html:not(.dark) .cosmo-prose h1, html:not(.dark) .cosmo-prose h2, html:not(.dark) .cosmo-prose h3, html:not(.dark) .cosmo-prose h4 {
   color: #0f172a;
 }
+
+html.dark .cosmo-prose strong {
+  color: #ffffff !important;
+}
+html:not(.dark) .cosmo-prose strong {
+  color: #0f172a !important;
+}
+
+html.dark .cosmo-prose em {
+  color: #e4e4e7;
+}
+html:not(.dark) .cosmo-prose em {
+  color: #334155;
+}
+
 .cosmo-prose h1 {
   font-size: 2rem;
   margin-top: 1.75rem;
@@ -122,16 +170,22 @@ html:not(.dark) .cosmo-prose h1, html:not(.dark) .cosmo-prose h2, html:not(.dark
 .cosmo-prose p {
   margin-bottom: 1rem;
 }
-html.dark .cosmo-prose p {
+html.dark .cosmo-prose p, html.dark .cosmo-prose li {
   color: #d4d4d8;
 }
-html:not(.dark) .cosmo-prose p {
-  color: #334155;
+html:not(.dark) .cosmo-prose p, html:not(.dark) .cosmo-prose li {
+  color: #1e293b;
 }
 .cosmo-prose ul {
   list-style-type: disc;
   padding-left: 1.5rem;
   margin-bottom: 1rem;
+}
+html.dark .cosmo-prose ul, html.dark .cosmo-prose ol {
+  color: #d4d4d8;
+}
+html:not(.dark) .cosmo-prose ul, html:not(.dark) .cosmo-prose ol {
+  color: #1e293b;
 }
 .cosmo-prose ol {
   list-style-type: decimal;

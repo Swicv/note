@@ -60,11 +60,11 @@ export function renderMarkdown(content: string): string {
     (_, type, text) => {
       const t = type.toLowerCase();
       const labels: Record<string, { title: string; color: string; bg: string; icon: string }> = {
-        note: { title: '注意 (Note)', color: 'text-blue-400', bg: 'border-blue-500/40 bg-blue-500/5', icon: 'ℹ️' },
-        tip: { title: '提示 (Tip)', color: 'text-emerald-400', bg: 'border-emerald-500/40 bg-emerald-500/5', icon: '💡' },
-        important: { title: '重要 (Important)', color: 'text-purple-400', bg: 'border-purple-500/40 bg-purple-500/5', icon: '⚡' },
-        warning: { title: '警告 (Warning)', color: 'text-amber-400', bg: 'border-amber-500/40 bg-amber-500/5', icon: '⚠️' },
-        caution: { title: '警惕 (Caution)', color: 'text-rose-400', bg: 'border-rose-500/40 bg-rose-500/5', icon: '🛑' },
+        note: { title: '注意 (Note)', color: 'text-blue-700 dark:text-blue-400', bg: 'border-blue-500 bg-blue-500/10 dark:border-blue-500/40 dark:bg-blue-500/5', icon: 'ℹ️' },
+        tip: { title: '提示 (Tip)', color: 'text-emerald-700 dark:text-emerald-400', bg: 'border-emerald-500 bg-emerald-500/10 dark:border-emerald-500/40 dark:bg-emerald-500/5', icon: '💡' },
+        important: { title: '重要 (Important)', color: 'text-purple-700 dark:text-purple-400', bg: 'border-purple-500 bg-purple-500/10 dark:border-purple-500/40 dark:bg-purple-500/5', icon: '⚡' },
+        warning: { title: '警告 (Warning)', color: 'text-amber-800 dark:text-amber-400', bg: 'border-amber-500 bg-amber-500/10 dark:border-amber-500/40 dark:bg-amber-500/5', icon: '⚠️' },
+        caution: { title: '警惕 (Caution)', color: 'text-rose-700 dark:text-rose-400', bg: 'border-rose-500 bg-rose-500/10 dark:border-rose-500/40 dark:bg-rose-500/5', icon: '🛑' },
       };
 
       const meta = labels[t] || labels.note;
@@ -75,38 +75,38 @@ export function renderMarkdown(content: string): string {
 
       return `
         <div class="callout my-4 rounded-xl border-l-4 p-4 ${meta.bg}">
-          <div class="flex items-center gap-2 font-semibold text-sm ${meta.color} mb-1">
+          <div class="flex items-center gap-2 font-semibold text-sm ${meta.color} mb-1.5">
             <span>${meta.icon}</span>
             <span>${meta.title}</span>
           </div>
-          <div class="text-sm text-zinc-300 leading-relaxed">${cleanContent}</div>
+          <div class="text-sm text-slate-800 dark:text-zinc-200 leading-relaxed font-normal">${cleanContent}</div>
         </div>
       `;
     }
   );
 
   // 5. Standard Blockquotes (> text)
-  html = html.replace(/^>\s*(.+)$/gm, '<blockquote class="border-l-2 border-purple-500/50 pl-4 py-1 my-3 text-zinc-400 italic">$1</blockquote>');
+  html = html.replace(/^>\s*(.+)$/gm, '<blockquote class="border-l-4 border-purple-500/60 bg-purple-500/5 pl-4 py-1.5 my-3 text-slate-700 dark:text-zinc-300 italic rounded-r-lg">$1</blockquote>');
 
   // 6. Headers (# Heading)
-  html = html.replace(/^######\s+(.+)$/gm, '<h6 class="text-sm font-bold text-zinc-300 mt-4 mb-2">$1</h6>');
-  html = html.replace(/^#####\s+(.+)$/gm, '<h5 class="text-base font-bold text-zinc-200 mt-5 mb-2">$1</h5>');
-  html = html.replace(/^####\s+(.+)$/gm, '<h4 class="text-lg font-bold text-zinc-100 mt-6 mb-2">$1</h4>');
+  html = html.replace(/^######\s+(.+)$/gm, '<h6 class="text-sm font-bold text-slate-700 dark:text-zinc-300 mt-4 mb-2">$1</h6>');
+  html = html.replace(/^#####\s+(.+)$/gm, '<h5 class="text-base font-bold text-slate-800 dark:text-zinc-200 mt-5 mb-2">$1</h5>');
+  html = html.replace(/^####\s+(.+)$/gm, '<h4 class="text-lg font-bold text-slate-800 dark:text-zinc-100 mt-6 mb-2">$1</h4>');
   html = html.replace(/^###\s+(.+)$/gm, (_, title) => {
     const id = title.trim().toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, '-');
-    return `<h3 id="${id}" class="text-xl font-bold text-zinc-50 mt-7 mb-3 tracking-tight flex items-center group">${title}</h3>`;
+    return `<h3 id="${id}" class="text-xl font-bold text-slate-900 dark:text-zinc-50 mt-7 mb-3 tracking-tight flex items-center group">${title}</h3>`;
   });
   html = html.replace(/^##\s+(.+)$/gm, (_, title) => {
     const id = title.trim().toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, '-');
-    return `<h2 id="${id}" class="text-2xl font-bold text-white mt-8 mb-4 tracking-tight border-b border-white/10 pb-2">${title}</h2>`;
+    return `<h2 id="${id}" class="text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4 tracking-tight border-b border-slate-200 dark:border-white/10 pb-2">${title}</h2>`;
   });
   html = html.replace(/^#\s+(.+)$/gm, (_, title) => {
     const id = title.trim().toLowerCase().replace(/[^\w\u4e00-\u9fa5]+/g, '-');
-    return `<h1 id="${id}" class="text-3xl font-extrabold text-white mt-9 mb-5 tracking-tight">${title}</h1>`;
+    return `<h1 id="${id}" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-9 mb-5 tracking-tight">${title}</h1>`;
   });
 
   // 7. Horizontal Rules (--- or ***)
-  html = html.replace(/^(?:---|\*\*\*|___)\s*$/gm, '<hr class="my-8 border-white/10" />');
+  html = html.replace(/^(?:---|\*\*\*|___)\s*$/gm, '<hr class="my-8 border-slate-200 dark:border-white/10" />');
 
   // 8. Task lists (- [ ] or - [x])
   html = html.replace(
@@ -114,28 +114,28 @@ export function renderMarkdown(content: string): string {
     (_, checked, text) => {
       const isChecked = checked.toLowerCase() === 'x';
       return `<li class="task-list-item my-1.5 flex items-start gap-2.5">
-        <input type="checkbox" ${isChecked ? 'checked' : ''} disabled class="mt-1 rounded accent-purple-500 cursor-default" />
-        <span class="${isChecked ? 'line-through text-zinc-500' : 'text-zinc-200'}">${text}</span>
+        <input type="checkbox" ${isChecked ? 'checked' : ''} disabled class="mt-1 rounded accent-purple-600 cursor-default" />
+        <span class="${isChecked ? 'line-through text-slate-400 dark:text-zinc-500' : 'text-slate-800 dark:text-zinc-200'}">${text}</span>
       </li>`;
     }
   );
 
   // 9. Unordered Lists (- or *)
-  html = html.replace(/^\s*[-*]\s+(.+)$/gm, '<li class="ml-4 list-disc text-zinc-300 my-1">$1</li>');
+  html = html.replace(/^\s*[-*]\s+(.+)$/gm, '<li class="ml-4 list-disc text-slate-800 dark:text-zinc-200 my-1 leading-relaxed">$1</li>');
 
   // 10. Ordered Lists (1. Item)
-  html = html.replace(/^\s*\d+\.\s+(.+)$/gm, '<li class="ml-4 list-decimal text-zinc-300 my-1">$1</li>');
+  html = html.replace(/^\s*\d+\.\s+(.+)$/gm, '<li class="ml-4 list-decimal text-slate-800 dark:text-zinc-200 my-1 leading-relaxed">$1</li>');
 
   // 11. Inline formatting: bold, italic, strikethrough, highlights
-  html = html.replace(/==([^=]+)==/g, '<mark class="bg-purple-500/25 text-purple-200 px-1 py-0.5 rounded">$1</mark>');
-  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold text-white">$1</strong>');
-  html = html.replace(/\*([^*]+)\*/g, '<em class="italic text-zinc-200">$1</em>');
-  html = html.replace(/~~([^~]+)~~/g, '<del class="line-through text-zinc-500">$1</del>');
-  html = html.replace(/`([^`]+)`/g, '<code class="font-mono text-[0.875em] bg-purple-500/15 text-purple-300 px-1.5 py-0.5 rounded-md">$1</code>');
+  html = html.replace(/==([^=]+)==/g, '<mark class="bg-amber-100 text-amber-900 dark:bg-purple-500/25 dark:text-purple-200 px-1 py-0.5 rounded font-medium">$1</mark>');
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>');
+  html = html.replace(/\*([^*]+)\*/g, '<em class="italic text-slate-800 dark:text-zinc-200">$1</em>');
+  html = html.replace(/~~([^~]+)~~/g, '<del class="line-through text-slate-400 dark:text-zinc-500">$1</del>');
+  html = html.replace(/`([^`]+)`/g, '<code class="font-mono text-[0.875em] bg-purple-50 text-purple-700 dark:bg-purple-500/15 dark:text-purple-300 px-1.5 py-0.5 rounded-md border border-purple-200/60 dark:border-transparent">$1</code>');
 
   // 12. Links & Images
-  html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="my-4 rounded-xl max-w-full h-auto border border-white/10 shadow-lg" />');
-  html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 underline underline-offset-4 transition-colors">$1</a>');
+  html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="my-4 rounded-xl max-w-full h-auto border border-slate-200 dark:border-white/10 shadow-lg" />');
+  html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-cyan-400 hover:text-indigo-500 dark:hover:text-cyan-300 underline underline-offset-4 transition-colors font-medium">$1</a>');
 
   // 13. Paragraphs (lines separated by double newlines)
   const blocks = html.split(/\n\n+/);
@@ -147,7 +147,7 @@ export function renderMarkdown(content: string): string {
         trimmed.startsWith('<ul') || trimmed.startsWith('<ol')) {
       return trimmed;
     }
-    return `<p class="my-3 leading-relaxed text-zinc-300">${trimmed.replace(/\n/g, '<br/>')}</p>`;
+    return `<p class="my-3 leading-relaxed text-slate-800 dark:text-zinc-200">${trimmed.replace(/\n/g, '<br/>')}</p>`;
   }).join('\n');
 
   return html;

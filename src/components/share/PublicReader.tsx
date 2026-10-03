@@ -21,8 +21,23 @@ export const PublicReader: React.FC<PublicReaderProps> = ({ slug }) => {
   const [unlocking, setUnlocking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('cosmo_theme');
+      if (saved) return saved === 'dark';
+    }
+    return true;
+  });
   const [showToc, setShowToc] = useState(false);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('cosmo_theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   useEffect(() => {
     loadMeta();
@@ -174,15 +189,15 @@ export const PublicReader: React.FC<PublicReaderProps> = ({ slug }) => {
 
   // Render Full Shared Article
   return (
-    <div className={`min-h-screen ${isDark ? 'dark bg-[#07080d] text-zinc-100' : 'light bg-white text-zinc-900'} transition-colors duration-200`}>
+    <div className={`min-h-screen ${isDark ? 'dark bg-[#07080d] text-zinc-100' : 'bg-slate-50 text-slate-900'} transition-colors duration-200`}>
       {/* Floating Reader Top Nav */}
       <header className={`sticky top-0 z-30 px-6 py-3.5 border-b backdrop-blur-xl flex items-center justify-between ${
-        isDark ? 'bg-[#07080d]/80 border-white/10' : 'bg-white/80 border-zinc-200'
+        isDark ? 'bg-[#07080d]/80 border-white/10' : 'bg-white/90 border-slate-200 text-slate-800 shadow-sm'
       }`}>
         <div className="flex items-center gap-3">
           <CosmoLogo size="sm" />
-          <span className="h-4 w-px bg-white/10" />
-          <span className="text-xs font-medium text-purple-400 tracking-wider font-mono uppercase">
+          <span className={`h-4 w-px ${isDark ? 'bg-white/10' : 'bg-slate-200'}`} />
+          <span className="text-xs font-semibold text-purple-600 dark:text-purple-400 tracking-wider font-mono uppercase">
             Public Reader
           </span>
         </div>
@@ -192,7 +207,9 @@ export const PublicReader: React.FC<PublicReaderProps> = ({ slug }) => {
             <button
               onClick={() => setShowToc(!showToc)}
               className={`px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
-                showToc ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30' : 'hover:bg-white/10 text-zinc-400'
+                showToc
+                  ? 'bg-purple-600/10 dark:bg-purple-600/20 text-purple-700 dark:text-purple-300 border border-purple-500/30'
+                  : 'hover:bg-slate-100 dark:hover:bg-white/10 text-slate-600 dark:text-zinc-400'
               }`}
             >
               <ListFilter className="w-3.5 h-3.5" />
@@ -202,16 +219,16 @@ export const PublicReader: React.FC<PublicReaderProps> = ({ slug }) => {
 
           <button
             onClick={copyMarkdown}
-            className="px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
             title="复制 Markdown 原文"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copied ? '已复制' : '复制原文'}</span>
           </button>
 
           <button
             onClick={() => window.print()}
-            className="p-1.5 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer"
             title="打印 / 导出 PDF"
           >
             <Printer className="w-4 h-4" />
@@ -219,7 +236,7 @@ export const PublicReader: React.FC<PublicReaderProps> = ({ slug }) => {
 
           <button
             onClick={() => setIsDark(!isDark)}
-            className="p-1.5 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer"
             title="切换阅读明暗模式"
           >
             {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-purple-600" />}
@@ -228,18 +245,18 @@ export const PublicReader: React.FC<PublicReaderProps> = ({ slug }) => {
       </header>
 
       {/* Main Reading Canvas */}
-      <div className="max-w-4xl mx-auto px-6 py-12 flex gap-10">
-        <article className="flex-1 min-w-0">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex gap-10">
+        <article className="flex-1 min-w-0 bg-white dark:bg-transparent p-6 sm:p-10 rounded-2xl border border-slate-200/80 dark:border-transparent shadow-sm dark:shadow-none">
           {/* Note Title & Meta Header */}
-          <div className="mb-10 pb-6 border-b border-white/10">
+          <div className="mb-10 pb-6 border-b border-slate-200 dark:border-white/10">
             <div className="flex items-center gap-3 mb-4">
               <span className="text-4xl">{content?.icon || '📄'}</span>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 {content?.title}
               </h1>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-400">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>{content ? new Date(content.updated_at).toLocaleDateString('zh-CN') : ''}</span>
@@ -265,17 +282,17 @@ export const PublicReader: React.FC<PublicReaderProps> = ({ slug }) => {
         {/* Floating Table of Contents */}
         {showToc && headings.length > 0 && (
           <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-20 p-4 rounded-xl border border-white/10 bg-[#0d101a]/70 backdrop-blur-xl">
-              <div className="text-xs font-semibold text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <div className="sticky top-20 p-4 rounded-xl border border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0d101a]/70 backdrop-blur-xl shadow-sm">
+              <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                 <ListFilter className="w-3.5 h-3.5" />
                 <span>章节大纲</span>
               </div>
-              <div className="space-y-1.5 max-h-[70vh] overflow-y-auto text-xs text-zinc-400">
+              <div className="space-y-1.5 max-h-[70vh] overflow-y-auto text-xs text-slate-600 dark:text-zinc-400">
                 {headings.map((h, i) => (
                   <a
                     key={i}
                     href={`#${h.id}`}
-                    className="block truncate py-1 hover:text-purple-300 transition-colors"
+                    className="block truncate py-1 hover:text-purple-600 dark:hover:text-purple-300 transition-colors"
                     style={{ paddingLeft: `${(h.level - 1) * 12}px` }}
                   >
                     {h.text}
@@ -288,7 +305,7 @@ export const PublicReader: React.FC<PublicReaderProps> = ({ slug }) => {
       </div>
 
       {/* Reader Footer */}
-      <footer className="mt-20 border-t border-white/5 py-8 text-center text-xs text-zinc-500">
+      <footer className="mt-20 border-t border-slate-200 dark:border-white/5 py-8 text-center text-xs text-slate-400 dark:text-zinc-500">
         <p>Cosmo Note · 星脉私有化笔记系统</p>
       </footer>
     </div>
