@@ -32,7 +32,7 @@
 
 4. **原生双模部署架构**
    - **Cloudflare 模式**：基于 Cloudflare Pages / Workers + Cloudflare D1 分布式数据库，享受全球边缘低延迟直出与免费 Serverless 托管。
-   - **Docker 模式**：官方提供 **AMD64 / ARM64 双架构** 镜像 `darkver8/cosmo-note:latest`（极轻量），挂载宿主机持久化卷 `./data:/data`，极速运行于群晖/威联通 NAS、极空间、绿联、树莓派、VPS 或本地电脑。
+   - **Docker 模式**：官方提供 **AMD64 / ARM64 双架构** 镜像 `darkver8/note:latest`（或 `darkver8/cosmo-note:latest`，极轻量），挂载宿主机持久化卷 `./data:/data`，极速运行于群晖/威联通 NAS、极空间、绿联、树莓派、VPS 或本地电脑。
    - **同构数据**：SQLite 与 D1 采用 100% 相同的数据表结构，支持全量 JSON 备份与无缝互相迁移。
 
 ---
@@ -49,7 +49,7 @@ docker run -d \
   --restart unless-stopped \
   -p 3000:3000 \
   -v $(pwd)/cosmo-data:/data \
-  darkver8/cosmo-note:latest
+  darkver8/note:latest
 ```
 
 启动完成后，打开浏览器访问：`http://你的服务器IP:3000` 即可进入！

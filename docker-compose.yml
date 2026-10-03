@@ -1,6 +1,6 @@
 services:
   cosmo-note:
-    image: darkver8/cosmo-note:latest
+    image: darkver8/note:latest # 亦可使用 darkver8/cosmo-note:latest
     # build: . # 如需本地自行编译，可取消本行注释并注释上方 image
     container_name: cosmo-note
     restart: unless-stopped
