@@ -169,9 +169,9 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#07080d] text-zinc-500 text-xs">
+      <div className="flex-1 flex items-center justify-center bg-white dark:bg-[#07080d] text-slate-400 dark:text-zinc-500 text-xs transition-colors">
         <div className="flex flex-col items-center gap-2">
-          <div className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-purple-600 dark:border-purple-500 border-t-transparent rounded-full animate-spin" />
           <span>正在提取知识星轨...</span>
         </div>
       </div>
@@ -180,82 +180,82 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
 
   if (!note) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#07080d] text-zinc-500 text-xs">
+      <div className="flex-1 flex items-center justify-center bg-white dark:bg-[#07080d] text-slate-400 dark:text-zinc-500 text-xs transition-colors">
         笔记已不存在
       </div>
     );
   }
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#07080d] relative">
+    <div className="flex-1 flex flex-col h-screen overflow-hidden bg-white dark:bg-[#07080d] transition-colors relative">
       {/* Top Header Toolbar */}
-      <header className="h-14 border-b border-white/10 px-4 sm:px-5 flex items-center justify-between bg-[#0a0c14]/60 backdrop-blur-xl shrink-0 z-10">
+      <header className="h-14 border-b border-slate-200 dark:border-white/10 px-4 sm:px-5 flex items-center justify-between bg-white/85 dark:bg-[#0a0c14]/60 backdrop-blur-xl shrink-0 z-10 transition-colors">
         <div className="flex items-center gap-2.5 min-w-0">
           {/* Mobile Menu Button */}
           {onToggleMobileSidebar && (
             <button
               onClick={onToggleMobileSidebar}
-              className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 md:hidden cursor-pointer"
+              className="p-1.5 rounded-lg text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 md:hidden cursor-pointer"
               title="打开目录"
             >
               <Menu className="w-5 h-5" />
             </button>
           )}
 
-            {/* Note Icon with Selector */}
-            <div className="relative">
-              <button
-                onClick={() => setShowIconPicker(!showIconPicker)}
-                className="text-2xl p-1.5 rounded-xl hover:bg-white/10 transition-all cursor-pointer select-none flex items-center justify-center"
-                title="更换笔记图标"
-              >
-                {icon}
-              </button>
-              {showIconPicker && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setShowIconPicker(false)} />
-                  <div className="absolute left-0 top-full mt-2 w-52 p-2.5 bg-[#0f121d]/95 border border-white/10 rounded-2xl shadow-2xl z-50 backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150">
-                    <div className="text-[11px] font-medium text-zinc-400 px-1 pb-2 border-b border-white/5 mb-2 flex items-center justify-between">
-                      <span>选择笔记图标</span>
-                      <span className="text-[10px] text-zinc-500 font-mono">ICONS</span>
-                    </div>
-                    <div className="grid grid-cols-4 gap-1.5">
-                      {emojiList.map((em) => (
-                        <button
-                          key={em}
-                          onClick={() => handleIconSelect(em)}
-                          className={`w-10 h-10 flex items-center justify-center rounded-xl text-xl transition-all cursor-pointer select-none ${
-                            em === icon
-                              ? 'bg-purple-600/30 border border-purple-500/50 shadow-inner'
-                              : 'hover:bg-white/10 hover:scale-105 active:scale-95'
-                          }`}
-                        >
-                          {em}
-                        </button>
-                      ))}
-                    </div>
+          {/* Note Icon with Selector */}
+          <div className="relative">
+            <button
+              onClick={() => setShowIconPicker(!showIconPicker)}
+              className="text-2xl p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/10 transition-all cursor-pointer select-none flex items-center justify-center"
+              title="更换笔记图标"
+            >
+              {icon}
+            </button>
+            {showIconPicker && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setShowIconPicker(false)} />
+                <div className="absolute left-0 top-full mt-2 w-52 p-2.5 bg-white/95 dark:bg-[#0f121d]/95 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl z-50 backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150">
+                  <div className="text-[11px] font-medium text-slate-500 dark:text-zinc-400 px-1 pb-2 border-b border-slate-100 dark:border-white/5 mb-2 flex items-center justify-between">
+                    <span>选择笔记图标</span>
+                    <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono">ICONS</span>
                   </div>
-                </>
-              )}
-            </div>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {emojiList.map((em) => (
+                      <button
+                        key={em}
+                        onClick={() => handleIconSelect(em)}
+                        className={`w-10 h-10 flex items-center justify-center rounded-xl text-xl transition-all cursor-pointer select-none ${
+                          em === icon
+                            ? 'bg-purple-100 dark:bg-purple-600/30 border border-purple-400 dark:border-purple-500/50 shadow-inner'
+                            : 'hover:bg-slate-100 dark:hover:bg-white/10 hover:scale-105 active:scale-95'
+                        }`}
+                      >
+                        {em}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
 
           {/* Sync Status Badge */}
           <div className="flex items-center gap-1.5 text-xs">
             {saveStatus === 'synced' && (
-              <span className="flex items-center gap-1 text-emerald-400 font-mono text-[11px]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
                 <span className="hidden sm:inline">已同步</span>
               </span>
             )}
             {saveStatus === 'saving' && (
-              <span className="flex items-center gap-1 text-purple-400 font-mono text-[11px]">
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping" />
+              <span className="flex items-center gap-1 text-purple-600 dark:text-purple-400 font-mono text-[11px]">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 dark:bg-purple-400 animate-ping" />
                 <span className="hidden sm:inline">保存中...</span>
               </span>
             )}
             {saveStatus === 'dirty' && (
-              <span className="flex items-center gap-1 text-amber-400 font-mono text-[11px]">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-mono text-[11px]">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400" />
                 <span className="hidden sm:inline">有未保存变更</span>
               </span>
             )}
@@ -265,11 +265,11 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
         {/* Right Header Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           {/* View Mode Segmented Controls */}
-          <div className="flex items-center p-0.5 rounded-lg bg-white/[0.04] border border-white/5 text-xs text-zinc-400">
+          <div className="flex items-center p-0.5 rounded-lg bg-slate-100 dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/5 text-xs text-slate-600 dark:text-zinc-400">
             <button
               onClick={() => setMode('edit')}
               className={`px-2 py-1 sm:px-2.5 rounded-md transition-colors cursor-pointer ${
-                mode === 'edit' ? 'bg-white/10 text-white font-medium' : 'hover:text-zinc-200'
+                mode === 'edit' ? 'bg-white dark:bg-white/10 text-purple-700 dark:text-white font-medium shadow-xs' : 'hover:text-slate-900 dark:hover:text-zinc-200'
               }`}
               title="仅编辑模式"
             >
@@ -278,7 +278,7 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
             <button
               onClick={() => setMode('split')}
               className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer hidden md:block ${
-                mode === 'split' ? 'bg-white/10 text-white font-medium' : 'hover:text-zinc-200'
+                mode === 'split' ? 'bg-white dark:bg-white/10 text-purple-700 dark:text-white font-medium shadow-xs' : 'hover:text-slate-900 dark:hover:text-zinc-200'
               }`}
               title="双栏实时对照"
             >
@@ -287,7 +287,7 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
             <button
               onClick={() => setMode('preview')}
               className={`px-2 py-1 sm:px-2.5 rounded-md transition-colors cursor-pointer ${
-                mode === 'preview' ? 'bg-white/10 text-white font-medium' : 'hover:text-zinc-200'
+                mode === 'preview' ? 'bg-white dark:bg-white/10 text-purple-700 dark:text-white font-medium shadow-xs' : 'hover:text-slate-900 dark:hover:text-zinc-200'
               }`}
               title="沉浸阅读预览"
             >
@@ -298,18 +298,18 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
           {/* Share Button (Core Requirement) */}
           <button
             onClick={() => onOpenShare(note)}
-            className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer shadow-md ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer shadow-xs ${
               note.is_shared === 1
-                ? 'bg-gradient-to-r from-cyan-600/30 to-purple-600/30 text-cyan-300 border border-cyan-500/40 shadow-cyan-500/10'
-                : 'bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 hover:text-white border border-white/10'
+                ? 'bg-gradient-to-r from-cyan-500/15 to-purple-500/15 text-cyan-700 dark:text-cyan-300 border border-cyan-400/40 shadow-sm'
+                : 'bg-slate-100 dark:bg-white/[0.04] hover:bg-slate-200/70 dark:hover:bg-white/[0.08] text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/10'
             }`}
             title="单笔记独立密码分享"
           >
             {note.is_shared === 1 ? (
               note.has_share_password ? (
-                <Shield className="w-3.5 h-3.5 text-purple-400" />
+                <Shield className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
               ) : (
-                <Globe className="w-3.5 h-3.5 text-cyan-400" />
+                <Globe className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
               )
             ) : (
               <Share2 className="w-3.5 h-3.5" />
@@ -321,7 +321,7 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
           <button
             onClick={() => setShowToc(!showToc)}
             className={`p-1.5 rounded-lg text-xs transition-colors cursor-pointer ${
-              showToc ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30' : 'text-zinc-400 hover:text-white hover:bg-white/10'
+              showToc ? 'bg-purple-100 dark:bg-purple-600/20 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-500/30' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10'
             }`}
             title="大纲目录"
           >
@@ -331,7 +331,7 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
           {/* Export Markdown */}
           <button
             onClick={exportMarkdownFile}
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
             title="导出为 .md 文件"
           >
             <Download className="w-4 h-4" />
@@ -341,97 +341,97 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
 
       {/* Quick Markdown Toolbar (Visible in edit or split mode) */}
       {mode !== 'preview' && (
-        <div className="h-9 border-b border-white/5 px-4 sm:px-5 flex items-center gap-1 bg-[#090b12]/40 text-zinc-400 text-xs shrink-0 overflow-x-auto select-none">
+        <div className="h-9 border-b border-slate-200 dark:border-white/5 px-4 sm:px-5 flex items-center gap-1 bg-slate-50/80 dark:bg-[#090b12]/40 text-slate-600 dark:text-zinc-400 text-xs shrink-0 overflow-x-auto select-none transition-colors">
           <button
             onClick={() => insertText('# ', '')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="一级标题 H1"
           >
             <Heading1 className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => insertText('## ', '')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="二级标题 H2"
           >
             <Heading2 className="w-3.5 h-3.5" />
           </button>
-          <div className="w-px h-3.5 bg-white/10 mx-1" />
+          <div className="w-px h-3.5 bg-slate-200 dark:bg-white/10 mx-1" />
           <button
             onClick={() => insertText('**', '**')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="加粗"
           >
             <Bold className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => insertText('*', '*')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="斜体"
           >
             <Italic className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => insertText('~~', '~~')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="删除线"
           >
             <Strikethrough className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => insertText('==', '==')}
-            className="px-1.5 py-0.5 rounded text-[11px] font-mono hover:text-white hover:bg-white/10"
+            className="px-1.5 py-0.5 rounded text-[11px] font-mono hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="高亮"
           >
             HL
           </button>
-          <div className="w-px h-3.5 bg-white/10 mx-1" />
+          <div className="w-px h-3.5 bg-slate-200 dark:bg-white/10 mx-1" />
           <button
             onClick={() => insertText('```typescript\n', '\n```')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="代码块"
           >
             <Code className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => insertText('> ', '')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="引用"
           >
             <Quote className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => insertText('> [!NOTE]\n> ', '')}
-            className="p-1 rounded hover:text-blue-400 hover:bg-white/10"
+            className="p-1 rounded hover:text-blue-500 hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="Callout 提示框"
           >
-            <Info className="w-3.5 h-3.5 text-blue-400" />
+            <Info className="w-3.5 h-3.5 text-blue-500 dark:text-blue-400" />
           </button>
           <button
             onClick={() => insertText('$ ', ' $')}
-            className="p-1 rounded hover:text-purple-400 hover:bg-white/10"
+            className="p-1 rounded hover:text-purple-600 dark:hover:text-purple-400 hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="KaTeX 数学公式"
           >
-            <Sigma className="w-3.5 h-3.5 text-purple-400" />
+            <Sigma className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
           </button>
-          <div className="w-px h-3.5 bg-white/10 mx-1" />
+          <div className="w-px h-3.5 bg-slate-200 dark:bg-white/10 mx-1" />
           <button
             onClick={() => insertText('- [ ] ', '')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="待办任务清单"
           >
             <CheckSquare className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => insertText('- ', '')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="无序列表"
           >
             <List className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => insertText('| 标题 1 | 标题 2 |\n| --- | --- |\n| 内容 1 | 内容 2 |\n', '')}
-            className="p-1 rounded hover:text-white hover:bg-white/10"
+            className="p-1 rounded hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-white/10 cursor-pointer"
             title="插入表格"
           >
             <Table className="w-3.5 h-3.5" />
@@ -450,7 +450,7 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="无标题笔记..."
-              className="w-full text-2xl sm:text-3xl font-extrabold tracking-tight bg-transparent text-white placeholder-zinc-600 focus:outline-none"
+              className="w-full text-2xl sm:text-3xl font-extrabold tracking-tight bg-transparent text-slate-900 dark:text-white placeholder-slate-300 dark:placeholder-zinc-600 focus:outline-none"
             />
           </div>
 
@@ -464,13 +464,13 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
                   value={content}
                   onChange={(e) => handleContentChange(e.target.value)}
                   placeholder="在此自由书写，支持全量 Markdown 标记、代码高亮、公式与 Callout 提示..."
-                  className="w-full h-full bg-transparent resize-none focus:outline-none text-sm font-mono leading-relaxed text-zinc-300 placeholder-zinc-600 selection:bg-purple-500/30"
+                  className="w-full h-full bg-transparent resize-none focus:outline-none text-sm font-mono leading-relaxed text-slate-800 dark:text-zinc-300 placeholder-slate-400 dark:placeholder-zinc-600 selection:bg-purple-500/30"
                 />
               </div>
             )}
 
             {/* Split Divider */}
-            {mode === 'split' && <div className="w-px h-full bg-white/5 shrink-0" />}
+            {mode === 'split' && <div className="w-px h-full bg-slate-200 dark:bg-white/5 shrink-0" />}
 
             {/* Formatted Markdown Preview */}
             {(mode === 'preview' || mode === 'split') && (

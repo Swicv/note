@@ -3,7 +3,7 @@ import { api } from '../../lib/api';
 import { NoteMeta } from '../../lib/types';
 import { 
   Settings, Key, Shield, Clock, Download, 
-  Check, AlertCircle, X, Server, Sparkles, HardDrive
+  Check, AlertCircle, X, Server, Sparkles, HardDrive, ExternalLink, Globe
 } from 'lucide-react';
 
 interface SettingsModalProps {
@@ -299,6 +299,32 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <span className="text-zinc-500 block">Docker 模式</span>
                     <span className="text-cyan-300 font-medium">Node.js + Better-SQLite3</span>
                   </div>
+                </div>
+
+                {/* Author Information Card */}
+                <div className="p-3.5 rounded-xl bg-gradient-to-r from-purple-900/20 via-indigo-900/15 to-cyan-900/20 border border-purple-500/20 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-sm">
+                      ✨
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-white flex items-center gap-1.5">
+                        <span>创作者主页</span>
+                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono">AUTHOR</span>
+                      </div>
+                      <div className="text-[11px] text-zinc-400">探索更多开源项目与思维星云</div>
+                    </div>
+                  </div>
+                  <a
+                    href="https://666228.xyz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 rounded-lg bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 hover:text-white text-xs font-medium flex items-center gap-1.5 transition-all shadow-md group cursor-pointer"
+                  >
+                    <Globe className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>666228.xyz</span>
+                    <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
                 </div>
               </div>
             )}

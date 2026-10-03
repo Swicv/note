@@ -1,9 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 
-export const CosmoBackground: React.FC = () => {
+interface CosmoBackgroundProps {
+  isDark?: boolean;
+}
+
+export const CosmoBackground: React.FC<CosmoBackgroundProps> = ({ isDark = true }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    if (!isDark) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -52,7 +58,17 @@ export const CosmoBackground: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [isDark]);
+
+  if (!isDark) {
+    return (
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-slate-50/50">
+        {/* Subtle Solar Day Atmosphere */}
+        <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-indigo-200/20 via-purple-200/15 to-transparent blur-[120px]" />
+        <div className="absolute top-[30%] -right-[10%] w-[45vw] h-[45vw] rounded-full bg-gradient-to-tl from-cyan-200/20 via-sky-200/15 to-transparent blur-[140px]" />
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">

@@ -82,14 +82,14 @@ export const CosmoLogo: React.FC<CosmoLogoProps> = ({
       {showText && (
         <div className="flex flex-col">
           <div className="flex items-center gap-1.5">
-            <span className={`font-extrabold tracking-tight bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent ${text}`}>
+            <span className={`font-extrabold tracking-tight text-slate-900 dark:text-white ${text}`}>
               Cosmo
             </span>
-            <span className={`font-mono font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 uppercase ${sub}`}>
+            <span className={`font-mono font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-cyan-600 dark:from-purple-400 dark:to-cyan-400 uppercase ${sub}`}>
               Note
             </span>
           </div>
-          <span className="text-[10px] tracking-widest text-zinc-500 font-mono -mt-1 uppercase">
+          <span className="text-[10px] tracking-widest text-slate-400 dark:text-zinc-500 font-mono -mt-1 uppercase">
             Personal Nexus
           </span>
         </div>

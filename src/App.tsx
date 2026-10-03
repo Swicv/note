@@ -32,8 +32,22 @@ export function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [sharingNote, setSharingNote] = useState<NoteMeta | null>(null);
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('cosmo_theme');
+    if (saved) return saved === 'dark';
+    return true;
+  });
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   // Auto lock tracking
   const checkAutoLock = useCallback((minutes: number) => {
@@ -175,13 +189,7 @@ export function App() {
   const toggleTheme = () => {
     const nextDark = !isDark;
     setIsDark(nextDark);
-    if (nextDark) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
-    } else {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
-    }
+    localStorage.setItem('cosmo_theme', nextDark ? 'dark' : 'light');
   };
 
   if (loading) {
@@ -226,8 +234,8 @@ export function App() {
   }
 
   return (
-    <div className={`flex h-screen w-screen overflow-hidden ${isDark ? 'dark bg-[#07080d] text-zinc-100' : 'light bg-slate-50 text-zinc-900'} relative`}>
-      <CosmoBackground />
+    <div className={`flex h-screen w-screen overflow-hidden ${isDark ? 'dark bg-[#07080d] text-zinc-100' : 'light bg-slate-50 text-slate-900'} relative transition-colors duration-200`}>
+      <CosmoBackground isDark={isDark} />
 
       {/* Main Workspace Layout */}
       <div className="flex-1 flex w-full h-full relative z-10 overflow-hidden">
@@ -256,7 +264,7 @@ export function App() {
               className="fixed inset-0 bg-black/70 backdrop-blur-sm"
               onClick={() => setIsMobileSidebarOpen(false)}
             />
-            <div className="relative z-50 w-72 h-full bg-[#0a0c14] border-r border-white/10 flex flex-col shadow-2xl animate-in slide-in-from-left duration-200">
+            <div className="relative z-50 w-72 h-full bg-white dark:bg-[#0a0c14] border-r border-slate-200 dark:border-white/10 flex flex-col shadow-2xl animate-in slide-in-from-left duration-200">
               <Sidebar
                 notes={notes}
                 activeNoteId={activeNoteId}
@@ -297,17 +305,17 @@ export function App() {
             onToggleMobileSidebar={() => setIsMobileSidebarOpen(true)}
           />
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-[#07080d]">
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 mb-4">
-              <Sparkles className="w-8 h-8 text-purple-400/70" />
+          <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-[#07080d] transition-colors">
+            <div className="p-4 rounded-2xl bg-slate-100 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 mb-4">
+              <Sparkles className="w-8 h-8 text-purple-600 dark:text-purple-400/70" />
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">知识星脉已静候就绪</h2>
-            <p className="text-xs text-zinc-500 max-w-sm mb-6">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">知识星脉已静候就绪</h2>
+            <p className="text-xs text-slate-500 dark:text-zinc-500 max-w-sm mb-6">
               请在左侧侧边栏选择一篇笔记，或点击「新建笔记」开启一段深邃思考。
             </p>
             <button
               onClick={() => handleCreateNote(null, false)}
-              className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium transition-colors cursor-pointer shadow-md"
             >
               新建灵感笔记
             </button>

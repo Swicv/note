@@ -1,8 +1,7 @@
 services:
   cosmo-note:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: darkver8/cosmo-note:latest
+    # build: . # 如需本地自行编译，可取消本行注释并注释上方 image
     container_name: cosmo-note
     restart: unless-stopped
     ports:
@@ -10,7 +9,7 @@ services:
     environment:
       - PORT=3000
       - DB_PATH=/data/cosmo.db
-      # - MASTER_PASSWORD=your-secure-access-code  # 可选：也可在首次进入网页时直接设置
-      # - JWT_SECRET=your-random-jwt-secret       # 可选
+      # - MASTER_PASSWORD=your-secure-access-code # 可选：环境变量预设主访问授权码
+      # - JWT_SECRET=your-random-secret          # 可选：自定义加密密钥
     volumes:
       - ./data:/data
