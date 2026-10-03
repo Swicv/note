@@ -105,6 +105,9 @@ export function renderMarkdown(content: string): string {
     return `<h1 id="${id}" class="text-3xl font-extrabold text-slate-900 dark:text-white mt-9 mb-5 tracking-tight">${title}</h1>`;
   });
 
+  // 6.5. GFM Tables
+  html = parseMarkdownTables(html);
+
   // 7. Horizontal Rules (--- or ***)
   html = html.replace(/^(?:---|\*\*\*|___)\s*$/gm, '<hr class="my-8 border-slate-200 dark:border-white/10" />');
 
@@ -144,7 +147,7 @@ export function renderMarkdown(content: string): string {
     if (!trimmed) return '';
     if (trimmed.startsWith('<h') || trimmed.startsWith('<div') || trimmed.startsWith('<pre') || 
         trimmed.startsWith('<hr') || trimmed.startsWith('<blockquote') || trimmed.startsWith('<li') ||
-        trimmed.startsWith('<ul') || trimmed.startsWith('<ol')) {
+        trimmed.startsWith('<ul') || trimmed.startsWith('<ol') || trimmed.startsWith('<table')) {
       return trimmed;
     }
     return `<p class="my-3 leading-relaxed text-slate-800 dark:text-zinc-200">${trimmed.replace(/\n/g, '<br/>')}</p>`;
@@ -191,3 +194,169 @@ if (typeof window !== 'undefined') {
     }
   });
 }
+
+function parseMarkdownTables(content: string): string {
+  const lines = content.split('\n');
+  const output: string[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    // Check if line is an empty stray pipe line before a table
+    if (trimmed === '|' && i + 2 < lines.length && isDelimiterRow(lines[i + 2])) {
+      i++;
+      continue;
+    }
+
+    // Look ahead to check if this line and the next form a table (Header + Delimiter)
+    if (isTableRow(line) && i + 1 < lines.length && isDelimiterRow(lines[i + 1])) {
+      const headerLine = line;
+      const delimiterLine = lines[i + 1];
+      i += 2;
+
+      const alignments = parseAlignments(delimiterLine);
+      const colCount = alignments.length;
+      const headerCells = parseCells(headerLine);
+      while (headerCells.length < colCount) headerCells.push('');
+
+      // Collect data rows
+      const rows: string[][] = [];
+      let currentCells: string[] = [];
+
+      while (i < lines.length) {
+        const curLine = lines[i];
+        const curTrimmed = curLine.trim();
+
+        // End of table on empty line or another block starting
+        if (!curTrimmed) break;
+        if (curTrimmed.startsWith('#') || curTrimmed.startsWith('```') || curTrimmed.startsWith('>')) {
+          break;
+        }
+
+        // Stray pipe skip
+        if (curTrimmed === '|') {
+          i++;
+          continue;
+        }
+
+        const lineStartsWithPipe = curTrimmed.startsWith('|');
+        const cells = parseCells(curLine);
+
+        if (currentCells.length === 0) {
+          currentCells = cells;
+        } else if (!lineStartsWithPipe && cells.length === 1) {
+          // Plain-text soft wrap: merge with previous cell
+          currentCells[currentCells.length - 1] += '<br/>' + cells[0];
+        } else if (currentCells.length < colCount) {
+          // Multi-line row split across lines
+          currentCells.push(...cells);
+        } else {
+          // Push previous completed row and start new row
+          rows.push(currentCells.slice(0, colCount));
+          currentCells = cells;
+        }
+
+        if (currentCells.length >= colCount && curTrimmed.endsWith('|')) {
+          rows.push(currentCells.slice(0, colCount));
+          currentCells = currentCells.slice(colCount);
+        }
+
+        i++;
+      }
+
+      if (currentCells.length > 0) {
+        while (currentCells.length < colCount) currentCells.push('');
+        rows.push(currentCells.slice(0, colCount));
+      }
+
+      // Generate Table HTML
+      const tableHtml = generateTableHtml(headerCells, alignments, rows);
+      output.push('\n\n' + tableHtml + '\n\n');
+    } else {
+      output.push(line);
+      i++;
+    }
+  }
+
+  return output.join('\n');
+}
+
+function isTableRow(line: string): boolean {
+  const trimmed = line.trim();
+  return trimmed.includes('|') && trimmed !== '|' && !trimmed.startsWith('```');
+}
+
+function isDelimiterRow(line: string): boolean {
+  const trimmed = line.trim();
+  if (!trimmed.includes('|')) return false;
+  const parts = trimmed.replace(/^\|/, '').replace(/\|$/, '').split('|');
+  if (parts.length === 0) return false;
+  return parts.every(p => /^[\s:]*-{2,}[\s:]*$/.test(p.trim()));
+}
+
+function parseAlignments(line: string): ('left' | 'center' | 'right' | null)[] {
+  const parts = line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|');
+  return parts.map(p => {
+    const t = p.trim();
+    const leftColon = t.startsWith(':');
+    const rightColon = t.endsWith(':');
+    if (leftColon && rightColon) return 'center';
+    if (rightColon) return 'right';
+    if (leftColon) return 'left';
+    return null;
+  });
+}
+
+function parseCells(line: string): string[] {
+  let trimmed = line.trim();
+  if (trimmed.startsWith('|')) trimmed = trimmed.substring(1);
+  if (trimmed.endsWith('|')) trimmed = trimmed.substring(0, trimmed.length - 1);
+  return trimmed.split('|').map(c => c.trim());
+}
+
+function generateTableHtml(
+  headers: string[],
+  alignments: ('left' | 'center' | 'right' | null)[],
+  rows: string[][]
+): string {
+  const alignClass = (align: 'left' | 'center' | 'right' | null) => {
+    if (align === 'center') return 'text-center';
+    if (align === 'right') return 'text-right';
+    return 'text-left';
+  };
+
+  const headerHtml = headers
+    .map((h, idx) => {
+      const align = alignments[idx] || 'left';
+      return `<th class="px-4 py-3 font-semibold text-slate-900 dark:text-zinc-100 ${alignClass(align)}">${h}</th>`;
+    })
+    .join('');
+
+  const rowsHtml = rows
+    .map((row) => {
+      const cellsHtml = row
+        .map((cell, idx) => {
+          const align = alignments[idx] || 'left';
+          return `<td class="px-4 py-3 text-slate-700 dark:text-zinc-300 ${alignClass(align)}">${cell}</td>`;
+        })
+        .join('');
+      return `<tr class="border-b border-slate-200/70 dark:border-white/5 hover:bg-slate-50/70 dark:hover:bg-white/[0.02] transition-colors">${cellsHtml}</tr>`;
+    })
+    .join('');
+
+  return `
+<div class="cosmo-table-container my-6 overflow-x-auto rounded-xl border border-slate-200 dark:border-white/10 shadow-sm bg-white dark:bg-[#0c0f18]/60 backdrop-blur-sm">
+  <table class="w-full text-sm border-collapse text-left">
+    <thead class="bg-slate-50 dark:bg-white/[0.04] border-b border-slate-200 dark:border-white/10 text-xs uppercase tracking-wider">
+      <tr>${headerHtml}</tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100 dark:divide-white/5">
+      ${rowsHtml}
+    </tbody>
+  </table>
+</div>
+`.trim();
+}
+
