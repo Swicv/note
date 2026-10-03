@@ -202,32 +202,42 @@ export const CosmoEditor: React.FC<CosmoEditorProps> = ({
             </button>
           )}
 
-          {/* Note Icon with Selector */}
-          <div className="relative">
-            <button
-              onClick={() => setShowIconPicker(!showIconPicker)}
-              className="text-2xl p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer select-none"
-              title="更换笔记图标"
-            >
-              {icon}
-            </button>
-            {showIconPicker && (
-              <>
-                <div className="fixed inset-0 z-30" onClick={() => setShowIconPicker(false)} />
-                <div className="absolute left-0 top-10 p-2 bg-[#121522] border border-white/10 rounded-xl shadow-2xl z-40 grid grid-cols-4 gap-1.5 backdrop-blur-2xl">
-                  {emojiList.map((em) => (
-                    <button
-                      key={em}
-                      onClick={() => handleIconSelect(em)}
-                      className="p-1.5 rounded-lg text-lg hover:bg-white/10 transition-colors"
-                    >
-                      {em}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+            {/* Note Icon with Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setShowIconPicker(!showIconPicker)}
+                className="text-2xl p-1.5 rounded-xl hover:bg-white/10 transition-all cursor-pointer select-none flex items-center justify-center"
+                title="更换笔记图标"
+              >
+                {icon}
+              </button>
+              {showIconPicker && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowIconPicker(false)} />
+                  <div className="absolute left-0 top-full mt-2 w-52 p-2.5 bg-[#0f121d]/95 border border-white/10 rounded-2xl shadow-2xl z-50 backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-150">
+                    <div className="text-[11px] font-medium text-zinc-400 px-1 pb-2 border-b border-white/5 mb-2 flex items-center justify-between">
+                      <span>选择笔记图标</span>
+                      <span className="text-[10px] text-zinc-500 font-mono">ICONS</span>
+                    </div>
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {emojiList.map((em) => (
+                        <button
+                          key={em}
+                          onClick={() => handleIconSelect(em)}
+                          className={`w-10 h-10 flex items-center justify-center rounded-xl text-xl transition-all cursor-pointer select-none ${
+                            em === icon
+                              ? 'bg-purple-600/30 border border-purple-500/50 shadow-inner'
+                              : 'hover:bg-white/10 hover:scale-105 active:scale-95'
+                          }`}
+                        >
+                          {em}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
 
           {/* Sync Status Badge */}
           <div className="flex items-center gap-1.5 text-xs">
