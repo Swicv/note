@@ -1,0 +1,14 @@
+node_modules/
+dist/
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+.wrangler/
+.env
+.env.local
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

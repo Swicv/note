@@ -1,0 +1,227 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-cosmic: #07080d;
+    --bg-surface: #0e111a;
+    --bg-surface-hover: #151926;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-active: rgba(139, 92, 246, 0.4);
+    --text-primary: #f4f5f8;
+    --text-secondary: #9eaad2;
+    --text-muted: #5e6b8a;
+    --glow-cyan: rgba(0, 242, 254, 0.3);
+    --glow-purple: rgba(139, 92, 246, 0.3);
+  }
+
+  html.light {
+    --bg-cosmic: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-surface-hover: #f1f5f9;
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --border-active: rgba(139, 92, 246, 0.5);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --glow-cyan: rgba(14, 165, 233, 0.2);
+    --glow-purple: rgba(139, 92, 246, 0.2);
+  }
+
+  body {
+    background-color: var(--bg-cosmic);
+    color: var(--text-primary);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Glassmorphism */
+.glass-panel {
+  background: rgba(15, 18, 28, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Cosmic Glow Effects */
+.cosmo-glow-border {
+  position: relative;
+}
+.cosmo-glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.4), rgba(139, 92, 246, 0.4), rgba(244, 63, 94, 0.4));
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.cosmo-glow-border:hover::after {
+  opacity: 1;
+}
+
+/* Callout Alert Styles in Markdown */
+.callout {
+  border-left-width: 4px;
+  padding: 0.85rem 1.15rem;
+  border-radius: 0.5rem;
+  margin: 1.25rem 0;
+  font-size: 0.95rem;
+}
+.callout-note {
+  border-left-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.08);
+}
+.callout-tip {
+  border-left-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.08);
+}
+.callout-warning {
+  border-left-color: #f59e0b;
+  background-color: rgba(245, 158, 11, 0.08);
+}
+.callout-important {
+  border-left-color: #8b5cf6;
+  background-color: rgba(139, 92, 246, 0.08);
+}
+.callout-caution {
+  border-left-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+/* Typography Enhancements for Editor & Reader */
+.cosmo-prose {
+  line-height: 1.8;
+  letter-spacing: -0.01em;
+}
+.cosmo-prose h1, .cosmo-prose h2, .cosmo-prose h3 {
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.cosmo-prose h1 {
+  font-size: 2rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.cosmo-prose h2 {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+.cosmo-prose h3 {
+  font-size: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.cosmo-prose p {
+  margin-bottom: 1rem;
+}
+.cosmo-prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.cosmo-prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.cosmo-prose blockquote {
+  border-left: 3px solid rgba(139, 92, 246, 0.5);
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.cosmo-prose code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875em;
+  background: rgba(139, 92, 246, 0.12);
+  color: #c4b5fd;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+}
+html.light .cosmo-prose code {
+  background: rgba(139, 92, 246, 0.1);
+  color: #6d28d9;
+}
+.cosmo-prose pre {
+  margin: 1.25rem 0;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  border: 1px solid var(--border-subtle);
+}
+.cosmo-prose pre code {
+  background: transparent;
+  padding: 1rem;
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: inherit;
+}
+.cosmo-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+}
+.cosmo-prose th, .cosmo-prose td {
+  border: 1px solid var(--border-subtle);
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+}
+.cosmo-prose th {
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+}
+html.light .cosmo-prose th {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Task Checkbox */
+.task-list-item {
+  list-style-type: none !important;
+  margin-left: -1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.task-list-item input[type="checkbox"] {
+  accent-color: #8b5cf6;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+}

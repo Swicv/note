@@ -1,0 +1,16 @@
+services:
+  cosmo-note:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cosmo-note
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_PATH=/data/cosmo.db
+      # - MASTER_PASSWORD=your-secure-access-code  # 可选：也可在首次进入网页时直接设置
+      # - JWT_SECRET=your-random-jwt-secret       # 可选
+    volumes:
+      - ./data:/data

@@ -1,0 +1,14 @@
+name = "cosmo-note"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+# Cloudflare D1 数据库绑定
+# 在 Cloudflare Dashboard 或执行 `npx wrangler d1 create cosmo_note_db` 后将 database_id 填入此处
+[[d1_databases]]
+binding = "DB"
+database_name = "cosmo_note_db"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[vars]
+# MASTER_PASSWORD = "your-master-access-code"  # 可选：环境变量直接设定主访问授权码
