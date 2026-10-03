@@ -3,7 +3,7 @@ import { api } from '../../lib/api';
 import { NoteMeta } from '../../lib/types';
 import { 
   Settings, Key, Shield, Clock, Download, 
-  Check, AlertCircle, X, Server, Sparkles, HardDrive, ExternalLink, Globe
+  Check, AlertCircle, X, Server, Sparkles, HardDrive, ExternalLink, Globe, FileUp
 } from 'lucide-react';
 
 interface SettingsModalProps {
@@ -12,6 +12,7 @@ interface SettingsModalProps {
   notes: NoteMeta[];
   autoLockMinutes: number;
   onUpdateAutoLock: (minutes: number) => void;
+  onOpenImport?: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -20,6 +21,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   notes,
   autoLockMinutes,
   onUpdateAutoLock,
+  onOpenImport,
 }) => {
   const [currentPass, setCurrentPass] = useState('');
   const [newPass, setNewPass] = useState('');
@@ -246,6 +248,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
             {activeTab === 'backup' && (
               <div className="space-y-4">
+                {/* Export Card */}
                 <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
@@ -262,6 +265,30 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       className="px-3.5 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 text-purple-300 text-xs font-medium transition-colors cursor-pointer shrink-0"
                     >
                       立即导出备份
+                    </button>
+                  </div>
+                </div>
+
+                {/* Import & Restore Card */}
+                <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-medium text-white flex items-center gap-2">
+                        <FileUp className="w-4 h-4 text-emerald-400" />
+                        <span>笔记导入与备份数据还原</span>
+                      </div>
+                      <p className="text-xs text-zinc-400 mt-1">
+                        批量汇入外部 Markdown (.md) 文件，或选择此前的 JSON 备份文件执行完整知识库恢复。
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        onClose();
+                        if (onOpenImport) onOpenImport();
+                      }}
+                      className="px-3.5 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 text-xs font-medium transition-colors cursor-pointer shrink-0"
+                    >
+                      打开导入向导
                     </button>
                   </div>
                 </div>

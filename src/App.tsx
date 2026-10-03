@@ -9,6 +9,7 @@ import { CosmoEditor } from './components/editor/CosmoEditor';
 import { SearchModal } from './components/sidebar/SearchModal';
 import { ShareModal } from './components/share/ShareModal';
 import { SettingsModal } from './components/settings/SettingsModal';
+import { ImportModal } from './components/sidebar/ImportModal';
 import { PublicReader } from './components/share/PublicReader';
 import { Sparkles, X } from 'lucide-react';
 
@@ -31,6 +32,8 @@ export function App() {
   // Modals & UI States
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
   const [sharingNote, setSharingNote] = useState<NoteMeta | null>(null);
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('cosmo_theme');
@@ -104,22 +107,59 @@ export function App() {
     }
   };
 
-  // Keyboard Shortcuts (Cmd+K, Cmd+N)
+  // Keyboard Shortcuts (Cmd+K, Cmd+N, Cmd+I)
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       tokenStorage.touch();
 
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsSearchOpen((prev) => !prev);
-      } else if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'n') {
         e.preventDefault();
         handleCreateNote(null, false);
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'i') {
+        e.preventDefault();
+        setIsImportOpen(true);
       }
     };
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [isUnlocked]);
+
+  // Global Drag & Drop for Markdown / JSON files
+  useEffect(() => {
+    if (!isUnlocked) return;
+
+    const handleWindowDragOver = (e: DragEvent) => {
+      e.preventDefault();
+    };
+
+    const handleWindowDrop = (e: DragEvent) => {
+      if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
+        const files = Array.from(e.dataTransfer.files);
+        const hasValid = files.some(
+          (f) =>
+            f.name.endsWith('.md') ||
+            f.name.endsWith('.markdown') ||
+            f.name.endsWith('.json') ||
+            f.name.endsWith('.txt')
+        );
+        if (hasValid) {
+          e.preventDefault();
+          setDroppedFiles(files);
+          setIsImportOpen(true);
+        }
+      }
+    };
+
+    window.addEventListener('dragover', handleWindowDragOver);
+    window.addEventListener('drop', handleWindowDrop);
+    return () => {
+      window.removeEventListener('dragover', handleWindowDragOver);
+      window.removeEventListener('drop', handleWindowDrop);
+    };
   }, [isUnlocked]);
 
   // Periodic Auto-lock checker
@@ -160,6 +200,20 @@ export function App() {
       }
     } catch (err) {
       console.error('Failed to delete note:', err);
+    }
+  };
+
+  const handleImportSuccess = async (importedIds: string[]) => {
+    try {
+      const list = await api.notes.list();
+      setNotes(list);
+      if (importedIds && importedIds.length > 0) {
+        setActiveNoteId(importedIds[0]);
+      } else if (list.length > 0 && !activeNoteId) {
+        setActiveNoteId(list[0].id);
+      }
+    } catch (err) {
+      console.error('Failed to reload notes after import:', err);
     }
   };
 
@@ -251,6 +305,7 @@ export function App() {
             onOpenShare={(note) => setSharingNote(note)}
             onOpenSearch={() => setIsSearchOpen(true)}
             onOpenSettings={() => setIsSettingsOpen(true)}
+            onOpenImport={() => setIsImportOpen(true)}
             onLock={handleLockWorkspace}
             isDark={isDark}
             onToggleTheme={toggleTheme}
@@ -285,6 +340,10 @@ export function App() {
                 }}
                 onOpenSettings={() => {
                   setIsSettingsOpen(true);
+                  setIsMobileSidebarOpen(false);
+                }}
+                onOpenImport={() => {
+                  setIsImportOpen(true);
                   setIsMobileSidebarOpen(false);
                 }}
                 onLock={handleLockWorkspace}
@@ -355,6 +414,20 @@ export function App() {
         onUpdateAutoLock={(min) => {
           setAuthStatus((prev) => (prev ? { ...prev, autoLockMinutes: min } : null));
         }}
+        onOpenImport={() => setIsImportOpen(true)}
+      />
+
+      {/* Import & Restore Modal */}
+      <ImportModal
+        isOpen={isImportOpen}
+        onClose={() => {
+          setIsImportOpen(false);
+          setDroppedFiles([]);
+        }}
+        notes={notes}
+        currentNoteId={activeNoteId}
+        onSuccess={handleImportSuccess}
+        initialFiles={droppedFiles}
       />
     </div>
   );

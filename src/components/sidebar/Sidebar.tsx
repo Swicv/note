@@ -4,7 +4,7 @@ import { NoteMeta } from '../../lib/types';
 import { NoteTreeItem } from './NoteTreeItem';
 import { 
   Plus, Search, Lock, Settings, Moon, Sun, 
-  ChevronLeft, Sparkles, FolderPlus, Pin, Layers, PanelLeftClose, PanelLeft
+  ChevronLeft, Sparkles, FolderPlus, Pin, Layers, PanelLeftClose, PanelLeft, FileUp
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -17,6 +17,7 @@ interface SidebarProps {
   onOpenShare: (note: NoteMeta) => void;
   onOpenSearch: () => void;
   onOpenSettings: () => void;
+  onOpenImport: () => void;
   onLock: () => void;
   isDark: boolean;
   onToggleTheme: () => void;
@@ -32,6 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenShare,
   onOpenSearch,
   onOpenSettings,
+  onOpenImport,
   onLock,
   isDark,
   onToggleTheme,
@@ -68,6 +70,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
             title="新建笔记 (Cmd+N)"
           >
             <Plus className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
+          </button>
+          <button
+            onClick={onOpenImport}
+            className="p-2 rounded-xl text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+            title="导入笔记与数据 (Cmd+I)"
+          >
+            <FileUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
           </button>
         </div>
         <div className="flex flex-col items-center gap-3">
@@ -146,10 +155,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
             <button
               onClick={() => onCreateNote(null, true)}
-              className="py-1.5 px-2.5 rounded-lg bg-slate-100 dark:bg-white/[0.03] hover:bg-slate-200/70 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/5 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white text-xs flex items-center gap-1 transition-colors cursor-pointer"
+              className="py-1.5 px-2 rounded-lg bg-slate-100 dark:bg-white/[0.03] hover:bg-slate-200/70 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/5 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white text-xs flex items-center gap-1 transition-colors cursor-pointer"
               title="新建文件夹"
             >
               <FolderPlus className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+            </button>
+            <button
+              onClick={onOpenImport}
+              className="py-1.5 px-2 rounded-lg bg-slate-100 dark:bg-white/[0.03] hover:bg-slate-200/70 dark:hover:bg-white/[0.08] border border-slate-200/80 dark:border-white/5 text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white text-xs flex items-center gap-1 transition-colors cursor-pointer"
+              title="导入笔记 (Markdown / 备份)"
+            >
+              <FileUp className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             </button>
           </div>
         </div>

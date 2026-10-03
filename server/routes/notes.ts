@@ -214,3 +214,105 @@ notesRouter.delete('/:id', async (c) => {
 
   return c.json({ ok: true, deleted: toDelete.length });
 });
+
+// Batch import notes (supports full backup JSON and batch Markdown files)
+notesRouter.post('/import', async (c) => {
+  const db = c.get('db') as DatabaseAdapter;
+  const body = await c.req.json();
+  const now = Date.now();
+
+  const { type = 'markdown', mode = 'merge', notes = [] } = body;
+
+  if (!Array.isArray(notes) || notes.length === 0) {
+    return c.json({ error: 'INVALID_DATA', message: '未包含有效的笔记数据' }, 400);
+  }
+
+  // If mode is 'overwrite' and type is 'backup', clear existing notes first
+  if (mode === 'overwrite' && type === 'backup') {
+    await db.execute('DELETE FROM note_tags');
+    await db.execute('DELETE FROM notes');
+  }
+
+  const importedIds: string[] = [];
+
+  if (type === 'backup') {
+    for (const item of notes) {
+      if (!item.title && !item.content) continue;
+      const noteId = item.id || generateRandomHex(8);
+      const parentId = item.parent_id || null;
+      const title = item.title || '无标题笔记';
+      const content = item.content || '';
+      const icon = item.icon || (item.is_folder ? '📁' : '📄');
+      const isFolder = item.is_folder ? 1 : 0;
+      const isPinned = item.is_pinned ? 1 : 0;
+      const isArchived = item.is_archived ? 1 : 0;
+      const sortOrder = typeof item.sort_order === 'number' ? item.sort_order : 0;
+      const createdAt = item.created_at || now;
+      const updatedAt = item.updated_at || now;
+      const isShared = item.is_shared ? 1 : 0;
+      const shareSlug = item.share_slug || null;
+
+      const existing = await db.get('SELECT id FROM notes WHERE id = ?', [noteId]);
+      if (existing) {
+        if (mode === 'merge') {
+          await db.execute(
+            `UPDATE notes SET 
+              parent_id = ?, title = ?, content = ?, icon = ?, is_folder = ?, 
+              is_pinned = ?, is_archived = ?, sort_order = ?, updated_at = ?
+             WHERE id = ?`,
+            [parentId, title, content, icon, isFolder, isPinned, isArchived, sortOrder, updatedAt, noteId]
+          );
+        }
+      } else {
+        await db.execute(
+          `INSERT INTO notes (
+            id, parent_id, title, content, icon, is_folder, is_pinned, 
+            is_archived, sort_order, is_shared, share_slug, created_at, updated_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [noteId, parentId, title, content, icon, isFolder, isPinned, isArchived, sortOrder, isShared, shareSlug, createdAt, updatedAt]
+        );
+      }
+      importedIds.push(noteId);
+    }
+  } else {
+    // Markdown batch import
+    for (const item of notes) {
+      const noteId = generateRandomHex(8);
+      let title = (item.title || '').trim();
+      const content = item.content || '';
+      const parentId = item.parent_id || null;
+
+      if (!title) {
+        const match = content.match(/^#\s+(.+)$/m);
+        if (match) {
+          title = match[1].trim();
+        } else {
+          title = '导入的笔记';
+        }
+      }
+
+      const icon = item.icon || '📄';
+      const maxOrderRow = await db.get(
+        `SELECT MAX(sort_order) as max_order FROM notes WHERE (parent_id = ? OR (parent_id IS NULL AND ? IS NULL))`,
+        [parentId, parentId]
+      );
+      const sortOrder = (maxOrderRow?.max_order ?? -1) + 1;
+
+      await db.execute(
+        `INSERT INTO notes (
+          id, parent_id, title, content, icon, is_folder, is_pinned, 
+          is_archived, sort_order, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, 0, 0, 0, ?, ?, ?)`,
+        [noteId, parentId, title, content, icon, sortOrder, now, now]
+      );
+      importedIds.push(noteId);
+    }
+  }
+
+  return c.json({
+    ok: true,
+    count: importedIds.length,
+    imported_ids: importedIds,
+  });
+});
+

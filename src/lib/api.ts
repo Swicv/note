@@ -96,6 +96,15 @@ export const api = {
         method: 'DELETE',
       }),
     search: (query: string) => request<SearchResult[]>(`/api/notes/search?q=${encodeURIComponent(query)}`),
+    batchImport: (data: {
+      type: 'markdown' | 'backup';
+      mode?: 'merge' | 'overwrite';
+      notes: any[];
+    }) =>
+      request<{ ok: boolean; count: number; imported_ids: string[] }>('/api/notes/import', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
   },
 
   share: {
