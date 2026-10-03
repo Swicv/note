@@ -89,7 +89,7 @@ export const CosmoLogo: React.FC<CosmoLogoProps> = ({
               Note
             </span>
           </div>
-          <span className="text-[10px] tracking-widest text-slate-400 dark:text-zinc-500 font-mono -mt-1 uppercase">
+          <span className="hidden sm:block text-[10px] tracking-widest text-slate-400 dark:text-zinc-500 font-mono -mt-1 uppercase">
             Personal Nexus
           </span>
         </div>
