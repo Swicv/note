@@ -42,14 +42,21 @@ export function renderMarkdown(content: string): string {
     }
 
     return `
-      <div class="relative group my-5 rounded-xl overflow-hidden border border-white/10 bg-[#0b0e17] shadow-xl">
-        <div class="flex items-center justify-between px-4 py-2 bg-white/[0.03] border-b border-white/5 text-xs text-zinc-400">
-          <span class="font-mono uppercase tracking-wider text-[11px] text-purple-400 font-semibold">${validLang}</span>
+      <div class="code-block-wrapper relative group my-5 rounded-xl overflow-hidden border border-slate-800/80 dark:border-white/10 bg-[#0d1117] shadow-lg shadow-black/5 dark:shadow-none">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-black/40 border-b border-white/[0.08] text-xs text-zinc-400 select-none">
+          <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5 opacity-60">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span>
+            </div>
+            <span class="font-mono uppercase tracking-wider text-[11px] text-purple-400 font-semibold ml-1.5">${validLang}</span>
+          </div>
           <button class="copy-code-btn px-2.5 py-1 rounded-md text-[11px] bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white transition-all cursor-pointer flex items-center gap-1" data-code="${encodeURIComponent(code.trimEnd())}">
             <span>复制</span>
           </button>
         </div>
-        <pre class="p-4 overflow-x-auto text-sm font-mono leading-relaxed"><code class="hljs ${validLang}">${highlighted}</code></pre>
+        <pre class="p-4 overflow-x-auto text-sm font-mono leading-relaxed !bg-transparent !border-0 !m-0 !rounded-none"><code class="hljs ${validLang} !bg-transparent !p-0 leading-relaxed">${highlighted}</code></pre>
       </div>
     `;
   });

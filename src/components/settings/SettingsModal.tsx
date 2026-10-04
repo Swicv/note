@@ -87,7 +87,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
       const backupData = {
         app: 'Cosmo Note',
-        version: '1.2.0',
+        version: '1.2.1',
         exported_at: new Date().toISOString(),
         total_notes: fullNotes.length,
         notes: fullNotes,
@@ -312,7 +312,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     🪐
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">Cosmo Note v1.2.0</h4>
+                    <h4 className="text-sm font-bold text-white">Cosmo Note v1.2.1</h4>
                     <p className="text-zinc-400 text-[11px]">极具设计感的个人私有化知识库与星脉空间</p>
                   </div>
                 </div>

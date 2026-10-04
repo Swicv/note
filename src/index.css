@@ -218,25 +218,28 @@ html:not(.dark) .cosmo-prose code {
   background: rgba(139, 92, 246, 0.1);
   color: #7c3aed;
 }
-.cosmo-prose pre {
+/* Code Blocks inside Markdown - Dark Terminal Cards */
+.cosmo-prose .code-block-wrapper pre {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 1rem 1.15rem !important;
+}
+.cosmo-prose .code-block-wrapper pre code {
+  padding: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+}
+
+.cosmo-prose pre:not(.code-block-wrapper pre) {
   margin: 1.25rem 0;
   border-radius: 0.75rem;
   overflow-x: auto;
-}
-html.dark .cosmo-prose pre {
-  background: #0d1017;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-html:not(.dark) .cosmo-prose pre {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-}
-.cosmo-prose pre code {
-  background: transparent !important;
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e4e4e7;
   padding: 1rem;
-  display: block;
-  font-size: 0.875rem;
-  line-height: 1.6;
 }
 .cosmo-prose table {
   width: 100%;
