@@ -204,32 +204,79 @@ html.dark .cosmo-prose blockquote {
 html:not(.dark) .cosmo-prose blockquote {
   color: #64748b;
 }
-.cosmo-prose code {
+.cosmo-prose :not(pre) > code {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.875em;
   padding: 0.15rem 0.35rem;
   border-radius: 0.35rem;
 }
-html.dark .cosmo-prose code {
+html.dark .cosmo-prose :not(pre) > code {
   background: rgba(139, 92, 246, 0.15);
   color: #c4b5fd;
 }
-html:not(.dark) .cosmo-prose code {
+html:not(.dark) .cosmo-prose :not(pre) > code {
   background: rgba(139, 92, 246, 0.1);
   color: #7c3aed;
 }
+
 /* Code Blocks inside Markdown - Dark Terminal Cards */
+.cosmo-prose .code-block-wrapper {
+  color: #e6edf3 !important;
+}
 .cosmo-prose .code-block-wrapper pre {
   margin: 0 !important;
   border: none !important;
   border-radius: 0 !important;
   background: transparent !important;
   padding: 1rem 1.15rem !important;
+  color: #e6edf3 !important;
 }
 .cosmo-prose .code-block-wrapper pre code {
   padding: 0 !important;
   background: transparent !important;
-  color: inherit !important;
+  color: #e6edf3 !important;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.cosmo-prose .code-block-wrapper pre code.hljs {
+  color: #e6edf3 !important;
+  background: transparent !important;
+}
+
+/* Vibrant Syntax Tokens for Dark Terminal Cards */
+.cosmo-prose .code-block-wrapper .hljs-keyword,
+.cosmo-prose .code-block-wrapper .hljs-selector-tag,
+.cosmo-prose .code-block-wrapper .hljs-subst {
+  color: #ff7b72 !important;
+}
+.cosmo-prose .code-block-wrapper .hljs-built_in,
+.cosmo-prose .code-block-wrapper .hljs-bullet,
+.cosmo-prose .code-block-wrapper .hljs-code {
+  color: #ffa657 !important;
+}
+.cosmo-prose .code-block-wrapper .hljs-string,
+.cosmo-prose .code-block-wrapper .hljs-title,
+.cosmo-prose .code-block-wrapper .hljs-section,
+.cosmo-prose .code-block-wrapper .hljs-attribute,
+.cosmo-prose .code-block-wrapper .hljs-literal,
+.cosmo-prose .code-block-wrapper .hljs-template-tag,
+.cosmo-prose .code-block-wrapper .hljs-template-variable,
+.cosmo-prose .code-block-wrapper .hljs-type,
+.cosmo-prose .code-block-wrapper .hljs-addition {
+  color: #79c0ff !important;
+}
+.cosmo-prose .code-block-wrapper .hljs-comment,
+.cosmo-prose .code-block-wrapper .hljs-quote,
+.cosmo-prose .code-block-wrapper .hljs-deletion {
+  color: #8b949e !important;
+}
+.cosmo-prose .code-block-wrapper .hljs-number {
+  color: #d2a8ff !important;
+}
+.cosmo-prose .code-block-wrapper .hljs-symbol,
+.cosmo-prose .code-block-wrapper .hljs-variable {
+  color: #ff7b72 !important;
 }
 
 .cosmo-prose pre:not(.code-block-wrapper pre) {
@@ -238,7 +285,7 @@ html:not(.dark) .cosmo-prose code {
   overflow-x: auto;
   background: #0d1117;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #e4e4e7;
+  color: #e6edf3 !important;
   padding: 1rem;
 }
 .cosmo-prose table {
